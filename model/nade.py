@@ -6,6 +6,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from one_out_lstm import OneOutLSTM
+from device import Device
 
 torch.manual_seed(1)
 np.random.seed(5)
@@ -32,11 +33,11 @@ class NADE():
         self._lstm_backdir = OneOutLSTM(self._input_dim, self._hidden_units, self._layer)
 
         # Check availability of GPUs
-        self._gpu = torch.cuda.is_available()
-        self._device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        if torch.cuda.is_available():
-            self._lstm_fordir = self._lstm_fordir.cuda()
-            self._lstm_backdir = self._lstm_backdir.cuda()
+        self._gpu = Device().is_GPU()
+        self._device = Device().get_device()
+        self._lstm_fordir = self._lstm_fordir.to(self._device)
+        self._lstm_backdir = self._lstm_backdir.to(self._device)
+        if self._gpu: print('GPU available')
 
         # Adam optimizer
         self._optimizer = torch.optim.Adam(list(self._lstm_fordir.parameters()) + list(self._lstm_backdir.parameters()),
@@ -55,9 +56,8 @@ class NADE():
             self._lstm_fordir = torch.load(name + '_fordir.dat', map_location=self._device)
             self._lstm_backdir = torch.load(name + '_backdir.dat', map_location=self._device)
 
-        if torch.cuda.is_available():
-            self._lstm_fordir = self._lstm_fordir.cuda()
-            self._lstm_backdir = self._lstm_backdir.cuda()
+        self._lstm_fordir = self._lstm_fordir.to(self._device)
+        self._lstm_backdir = self._lstm_backdir.to(self._device)
 
         self._optimizer = torch.optim.Adam(list(self._lstm_fordir.parameters()) + list(self._lstm_backdir.parameters()),
                                            lr=self._lr, betas=(0.9, 0.999))

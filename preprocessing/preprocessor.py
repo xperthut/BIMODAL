@@ -24,10 +24,12 @@ class Preprocessor:
 
         if os.path.isfile(name + '.csv'):
             self._data = pd.read_csv(name + '.csv', header=None).values[:, 0]
-        elif os.path.isfile(dname + '.tar.xz'):
+        elif os.path.isfile(name + '.tar.xz'):
             # Skip first line since empty and last line since nan
-            self._data = pd.read_csv(data_name + '.tar.xz', compression='xz', header=None).values[1:-1, 0]
+            self._data = pd.read_csv(name + '.tar.xz', compression='xz', header=None).values[1:-1, 0]
 
+        print(len(self._data))
+        
         # Remove empty dimensions
         self._data = np.squeeze(self._data)
         return
@@ -39,6 +41,7 @@ class Preprocessor:
         :param aug:     Data augmentation
         :return:
         """
+        print(name, length)
         
         if name == "ForwardRNN":
             self.add_ending('E')
@@ -231,7 +234,7 @@ class Preprocessor:
         else:
             max_l = l // 2
 
-        aug_data = np.empty((self._data.size, aug)).astype(object)
+        aug_data = np.empty((np.size(self._data), aug)).astype(object)
         for i, s in enumerate(self._data):
             l = len(s)
             # Choose n different position for starting token (after 0 and before l-1,
@@ -245,7 +248,7 @@ class Preprocessor:
                 aug_data[i, j] = s[:r_j].rjust(max_l, pad_token) + start_token + s[r_j:].ljust(max_l, pad_token)
 
         # Convert array to shape (n_samples, n_augmentation)
-        print(self._data.shape)
+        print(np.shape(self._data))
         self._data = aug_data.astype(str)
 
     def insert_missing_token(self, missing_token='M', aug=1):
@@ -311,6 +314,7 @@ class Preprocessor:
         return l
 
     def save_data(self, name='data.csv'):
+        print(len(self._data))
         pd.DataFrame(self._data).to_csv(name, header=None, index=None)
         return
 

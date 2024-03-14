@@ -1,6 +1,15 @@
-def preprocess_data(filename_in='../data/chembl_smiles', filename_out='', model_type='BIMODAL', starting_point='fixed',
-                    invalid=True, duplicates=True, salts=True, stereochem=True, canonicalize=True, min_len=34,
-                    max_len=74, augmentation=1):
+def preprocess_data(filename_in='../data/chembl_smiles', 
+                    filename_out='', 
+                    model_type='BIMODAL', 
+                    starting_point='fixed',
+                    invalid=True, 
+                    duplicates=True, 
+                    salts=True, 
+                    stereochem=True, 
+                    canonicalize=True, 
+                    min_len=34,
+                    max_len=74, 
+                    augmentation=1):
 
     """Pre-processing of SMILES based on the user-defined parameters
         :param filename_in     path to the file containing the SMILES to pretreat (SMILES only) -- default = ChEMBL
@@ -54,12 +63,14 @@ def preprocess_data(filename_in='../data/chembl_smiles', filename_out='', model_
         name = model_type
     else:
         name = model_type + "_" + starting_point
-        if augmentation > 1 and starting_point is 'fixed':  # removes augmentation for fixed starting point
+        if augmentation > 1 and starting_point == 'fixed':  # removes augmentation for fixed starting point
             augmentation = 1
 
     p.preprocess(name, aug=augmentation, length=max_len)
 
-    if filename_out is '':
+    if filename_out == '':
+        if augmentation > 1:
+            name += '_aug_'+str(augmentation)
         filename_out = '../data/' + dataname + '_' + name + '.csv'
 
     # Store new file

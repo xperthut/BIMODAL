@@ -7,7 +7,8 @@ import torch
 import torch.nn as nn
 from one_out_lstm import OneOutLSTM
 import torch.nn.functional as F
-from scipy.misc import logsumexp
+from scipy.special import logsumexp
+from device import Device
 
 torch.manual_seed(1)
 np.random.seed(5)
@@ -29,10 +30,10 @@ class ForwardRNN():
         self._lstm = OneOutLSTM(self._input_dim, self._hidden_units, self._layer)
 
         # Check availability of GPUs
-        self._gpu = torch.cuda.is_available()
-        self._device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        if torch.cuda.is_available():
-            self._lstm = self._lstm.cuda()
+        self._gpu = Device().is_GPU()
+        self._device = Device().get_device()
+        self._lstm = self._lstm.to(self._device)
+        if self._gpu: print('GPU available')
 
         self._optimizer = torch.optim.Adam(self._lstm.parameters(), lr=self._lr, betas=(0.9, 0.999))
 
@@ -52,8 +53,7 @@ class ForwardRNN():
         else:
             self._lstm = torch.load(name + '.dat', map_location=self._device)
 
-        if torch.cuda.is_available():
-            self._lstm = self._lstm.cuda()
+        self._lstm = self._lstm.to(self._device)
 
         self._optimizer = torch.optim.Adam(self._lstm.parameters(), lr=self._lr, betas=(0.9, 0.999))
 

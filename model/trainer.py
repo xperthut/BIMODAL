@@ -29,21 +29,43 @@ class Trainer():
         self._config.read('../experiments/' + experiment_name + '.ini')
 
         self._model_type = self._config['MODEL']['model']
+        print(f'Model type={self._model_type}')
+        
         self._experiment_name = experiment_name
+        print(f'Experiment name={self._experiment_name}')
+        
         self._hidden_units = int(self._config['MODEL']['hidden_units'])
+        print(f'Hidden units={self._hidden_units}')
 
         self._file_name = '../data/' + self._config['DATA']['data']
+        print(f'File name={self._file_name}')
+        
         self._encoding_size = int(self._config['DATA']['encoding_size'])
+        print(f'Encode size={self._encoding_size}')
+        
         self._molecular_size = int(self._config['DATA']['molecular_size'])
-
+        print(f'Molecular size={self._molecular_size}')
+        
         self._epochs = int(self._config['TRAINING']['epochs'])
+        print(f'Epochs size={self._epochs}')
+        
         self._n_folds = int(self._config['TRAINING']['n_folds'])
+        print(f'No of folds={self._n_folds}')
+        
         self._learning_rate = float(self._config['TRAINING']['learning_rate'])
+        print(f'Learning rate={self._learning_rate}')
+        
         self._batch_size = int(self._config['TRAINING']['batch_size'])
+        print(f'Batch size={self._batch_size}')
 
         self._samples = int(self._config['EVALUATION']['samples'])
+        print(f'Sample size={self._samples}')
+        
         self._T = float(self._config['EVALUATION']['temp'])
+        print(f'Temp={self._T}')
+        
         self._starting_token = self._encoder.encode([self._config['EVALUATION']['starting_token']])
+        print(f'Starting token={self._starting_token}')
 
         if self._model_type == 'FBRNN':
             self._model = FBRNN(self._molecular_size, self._encoding_size,
@@ -291,6 +313,8 @@ class Trainer():
 
         # Compute labels
         label = np.argmax(self._data, axis=-1).astype(int)
+        #print(np.shape(label))
+        #print(label)
 
         # Special preprocessing in the case of NADE
         if (self._model_type == 'NADE') and self._generation == 'random':

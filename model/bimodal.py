@@ -6,6 +6,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from bidir_lstm import BiDirLSTM
+from device import Device
 
 torch.manual_seed(1)
 np.random.seed(5)
@@ -28,12 +29,11 @@ class BIMODAL():
         self._lstm = BiDirLSTM(self._input_dim, self._hidden_units, self._layer)
 
         # Check availability of GPUs
-        self._gpu = torch.cuda.is_available()
-        self._device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        if torch.cuda.is_available():
-            self._lstm = self._lstm.cuda()
-            print('GPU available')
-
+        self._gpu = Device().is_GPU()
+        self._device = Device().get_device()
+        self._lstm = self._lstm.to(self._device)
+        if self._gpu: print('GPU available')
+        
         # Adam optimizer
         self._optimizer = torch.optim.Adam(self._lstm.parameters(), lr=self._lr, betas=(0.9, 0.999))
         # Cross entropy loss
@@ -50,8 +50,7 @@ class BIMODAL():
         else:
             self._lstm = torch.load(name + '.dat', map_location=self._device)
 
-        if torch.cuda.is_available():
-            self._lstm = self._lstm.cuda()
+        self._lstm = self._lstm.to(self._device)
 
         self._optimizer = torch.optim.Adam(self._lstm.parameters(), lr=self._lr, betas=(0.9, 0.999))
 
@@ -72,6 +71,7 @@ class BIMODAL():
 
         # Number of samples
         n_samples = data.shape[0]
+        print(f'Samples={n_samples}')
 
         # Change axes from (n_samples, molecule_size, encoding_dim) to (molecule_size, n_samples, encoding_dim)
         data = np.swapaxes(data, 0, 1)
@@ -80,11 +80,14 @@ class BIMODAL():
         label = torch.from_numpy(label).to(self._device)
 
         # Calculate number of batches per epoch
-        if (n_samples % batch_size) is 0:
+        if (n_samples % batch_size) == 0:
             n_iter = n_samples // batch_size
         else:
             n_iter = n_samples // batch_size + 1
-
+        
+        print(f'# epochs={epochs}')
+        print(f'# iterations per epochs={n_iter}')
+        
         # To store losses
         statistic = np.zeros((epochs, n_iter))
 
@@ -106,6 +109,7 @@ class BIMODAL():
                 # Compute indices used as batch
                 batch_start = n * batch_size
                 batch_end = min((n + 1) * batch_size, n_samples)
+                #print(f'Batch (start, end) = ({batch_start},{batch_end})')
 
                 # Reset model with correct batch size
                 self._lstm.new_sequence(batch_end - batch_start, self._device)
@@ -131,6 +135,7 @@ class BIMODAL():
 
                     # Compute loss and extend sequence read by the model
                     if j % 2 == 0:
+                        #print(batch_start,batch_end,end)
                         loss = self._loss(pred, label[batch_start:batch_end, end])
                         end += 1
 
@@ -179,7 +184,7 @@ class BIMODAL():
             tot_loss = 0
 
             # Calculate number of batches per epoch
-            if (n_samples % batch_size) is 0:
+            if (n_samples % batch_size) == 0:
                 n_iter = n_samples // batch_size
             else:
                 n_iter = n_samples // batch_size + 1

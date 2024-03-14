@@ -22,7 +22,7 @@ class SMILESEncoder():
                                 ])
 
         # Dictionary mapping index to token
-        self._encoder = OneHotEncoder(categories=[self._tokens], dtype=np.uint8, sparse=False)
+        self._encoder = OneHotEncoder(categories=[self._tokens], dtype=np.uint8, sparse_output=False)
 
     def encode_from_file(self, name='data'):
         '''One-hot-encoding from .csv file
