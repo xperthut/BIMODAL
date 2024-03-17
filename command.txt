@@ -1,0 +1,2 @@
+zsh generate_data.sh data/getter_smiles_KP_V1 14 74
+
