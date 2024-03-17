@@ -71,7 +71,7 @@ def preprocess_data(filename_in='../data/chembl_smiles',
     if filename_out == '':
         if augmentation > 1:
             name += '_aug_'+str(augmentation)
-        filename_out = '../data/' + dataname + '_' + name + '.csv'
+        filename_out = 'data/' + dataname + '_' + name + '.csv'
 
     # Store new file
     p.save_data(filename_out)
