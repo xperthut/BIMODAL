@@ -1,0 +1,2 @@
+# BIMODAL fixed
+python preprocess_main.py --filename '../data/getter_smiles_KP_V1' --minlen 14 --maxlen 74
