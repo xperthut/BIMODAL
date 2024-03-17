@@ -8,4 +8,4 @@ source "$CONDA_BASE_DIR/etc/profile.d/conda.sh"
 
 source activate Torch
 
-python preprocessing/preprocess_main.py --filename $1 --minlen $2 --maxlen $3
+python preprocessing/preprocess_main.py --filename $1 --modelname $2 --starting $3 --minlen $4 --maxlen $5 --aug $6
