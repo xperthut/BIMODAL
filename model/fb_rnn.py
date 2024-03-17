@@ -74,7 +74,7 @@ class FBRNN():
         n_samples = data.shape[0]
 
         # Calculate number of batches per epoch
-        if (n_samples % batch_size) is 0:
+        if (n_samples % batch_size) == 0:
             n_iter = n_samples // batch_size
         else:
             n_iter = n_samples // batch_size + 1
@@ -167,7 +167,7 @@ class FBRNN():
             tot_loss = 0
 
             # Calculate number of batches per epoch
-            if (n_samples % batch_size) is 0:
+            if (n_samples % batch_size) == 0:
                 n_iter = n_samples // batch_size
             else:
                 n_iter = n_samples // batch_size + 1

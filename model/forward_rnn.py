@@ -79,7 +79,7 @@ class ForwardRNN():
         data = torch.from_numpy(data).to(self._device)
 
         # Calculate number of batches per epoch
-        if (n_samples % batch_size) is 0:
+        if (n_samples % batch_size) == 0:
             n_iter = n_samples // batch_size
         else:
             n_iter = n_samples // batch_size + 1

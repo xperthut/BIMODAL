@@ -80,7 +80,7 @@ class NADE():
         label = torch.from_numpy(label).to(self._device)
 
         # Calculate number of batches per epoch
-        if (n_samples % batch_size) is 0:
+        if (n_samples % batch_size) == 0:
             n_iter = n_samples // batch_size
         else:
             n_iter = n_samples // batch_size + 1
@@ -251,7 +251,7 @@ class NADE():
             tot_loss = 0
 
             # Calculate number of batches per epoch
-            if (n_samples % batch_size) is 0:
+            if (n_samples % batch_size) == 0:
                 n_iter = n_samples // batch_size
             else:
                 n_iter = n_samples // batch_size + 1

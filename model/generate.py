@@ -27,13 +27,16 @@ if __name__=="__main__":
     model = Trainer(model_name)
     
     if run_type == "complete":
-        model.complete_run(stor_dir="evaluation/")
+        model.complete_run()
     elif run_type == "single":
-        model.single_run(stor_dir="evaluation/")
+        model.single_run()
     elif run_type == "cross":
-        model.cross_validation(stor_dir="evaluation/")
+        model.cross_validation()
         
-    respath = os.path.join('evaluation', model_name, 'result')
+    s = Sampler(model)
+    s.sample(N=N)
+        
+    respath = os.path.join('evaluation', model_name, 'molecules')
     gen_fl = set()
 
     if os.path.exists(respath):
@@ -44,6 +47,7 @@ if __name__=="__main__":
             print(new_mol)
             for x in new_mol:
                 gen_fl.add(x)
-    len(gen_fl), gen_fl
+                
+    print(gen_fl)
 
     

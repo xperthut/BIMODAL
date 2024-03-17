@@ -26,7 +26,7 @@ class Trainer():
 
         # Read all parameter from the .ini file
         self._config = configparser.ConfigParser()
-        self._config.read('../experiments/' + experiment_name + '.ini')
+        self._config.read('experiments/' + experiment_name + '.ini')
 
         self._model_type = self._config['MODEL']['model']
         print(f'Model type={self._model_type}')
@@ -37,7 +37,7 @@ class Trainer():
         self._hidden_units = int(self._config['MODEL']['hidden_units'])
         print(f'Hidden units={self._hidden_units}')
 
-        self._file_name = '../data/' + self._config['DATA']['data']
+        self._file_name = 'data/' + self._config['DATA']['data']
         print(f'File name={self._file_name}')
         
         self._encoding_size = int(self._config['DATA']['encoding_size'])
@@ -86,7 +86,7 @@ class Trainer():
 
         self._data = self._encoder.encode_from_file(self._file_name)
 
-    def complete_run(self, stor_dir='../evaluation/', restart=False):
+    def complete_run(self, stor_dir='evaluation/', restart=False):
         '''Training without validation on complete data'''
 
         # Create directories
@@ -176,7 +176,7 @@ class Trainer():
                 stor_dir + '/' + self._experiment_name + '/statistic/stat_fold_' + str(fold) + '.csv',
                 header=None)
 
-    def single_run(self, stor_dir='../evaluation/', restart=False):
+    def single_run(self, stor_dir='evaluation/', restart=False):
         '''Training with validation and store data'''
 
         # Create directories
@@ -290,7 +290,7 @@ class Trainer():
                 stor_dir + '/' + self._experiment_name + '/validation/val_fold_' + str(fold) + '.csv',
                 header=None)
 
-    def cross_validation(self, stor_dir='../evaluation/', restart=False):
+    def cross_validation(self, stor_dir='evaluation/', restart=False):
         '''Perform cross-validation and store data'''
 
         # Create directories

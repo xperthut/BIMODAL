@@ -24,7 +24,7 @@ class Sampler():
 
         # Read parameter used during training
         self._config = configparser.ConfigParser()
-        self._config.read('../experiments/' + experiment_name + '.ini')
+        self._config.read('experiments/' + experiment_name + '.ini')
         
         self._model_type = self._config['MODEL']['model']
         self._experiment_name = experiment_name
@@ -61,18 +61,18 @@ class Sampler():
                                self._hidden_units, self._generation, self._missing_token)
 
         # Read data
-        if os.path.isfile('../data/' + self._file_name + '.csv'):
-            self._data = pd.read_csv('../data/' + self._file_name + '.csv', header=None).values[:, 0]
-        elif os.path.isfile('../data/' + self._file_name + '.tar.xz'):
+        if os.path.isfile('data/' + self._file_name + '.csv'):
+            self._data = pd.read_csv('data/' + self._file_name + '.csv', header=None).values[:, 0]
+        elif os.path.isfile('data/' + self._file_name + '.tar.xz'):
             # Skip first line since empty and last line since nan
-            self._data = pd.read_csv('../data/' + self._file_name + '.tar.xz', compression='xz', header=None).values[
+            self._data = pd.read_csv('data/' + self._file_name + '.tar.xz', compression='xz', header=None).values[
                          1:-1, 0]
 
         # Clean data from start, end and padding token
         for i, mol_dat in enumerate(self._data):
             self._data[i] = clean_molecule(mol_dat, self._model_type)
 
-    def sample(self, N=100, stor_dir='../evaluation', T=0.7, fold=[1], epoch=[9], valid=True, novel=True, unique=True, write_csv=True):
+    def sample(self, N=100, stor_dir='evaluation', T=0.7, fold=[1], epoch=[9], valid=True, novel=True, unique=True, write_csv=True):
 
         '''Sample from a model where the number of novel valid unique molecules is fixed
         :param stor_dir:    directory where the generated SMILES are saved

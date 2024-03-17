@@ -24,13 +24,13 @@ class FineTuner():
 
         # Read all parameter from the .ini file
         self._config = configparser.ConfigParser()
-        self._config.read('../experiments/' + experiment_name + '.ini')
+        self._config.read('experiments/' + experiment_name + '.ini')
 
         self._model_type = self._config['MODEL']['model']
         self._experiment_name = experiment_name
         self._hidden_units = int(self._config['MODEL']['hidden_units'])
 
-        self._file_name = '../data/' + self._config['DATA']['data']
+        self._file_name = 'data/' + self._config['DATA']['data']
         self._encoding_size = int(self._config['DATA']['encoding_size'])
         self._molecular_size = int(self._config['DATA']['molecular_size'])
 
@@ -65,7 +65,7 @@ class FineTuner():
 
         self._data = self._encoder.encode_from_file(self._file_name)
 
-    def fine_tuning(self, stor_dir='../evaluation/', restart=False):
+    def fine_tuning(self, stor_dir='evaluation/', restart=False):
         '''Perform fine-tuning and store statistic,
         NOTE: Directory should be prepared with the correct name and model
         NOTE: Molecules are not generated or validation is not performed. To sample molecules sampler should be used'
