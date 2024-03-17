@@ -130,9 +130,9 @@ class Sampler():
                     if not os.path.exists(stor_dir + '/' + self._experiment_name + '/molecules/'):
                         os.makedirs(stor_dir + '/' + self._experiment_name + '/molecules/')
                     mol = np.array(new_molecules).reshape(-1)
-                    pd.DataFrame(mol).to_csv(stor_dir + '/' + self._experiment_name + '/molecules/' + name, header=None)
+                    pd.DataFrame(mol).to_csv(stor_dir + '/' + self._experiment_name + '/molecules/' + name, header=None, index=False)
         
-            res_molecules.append(new_molecules)
+                res_molecules.append(new_molecules)
         
         print('Sampling: done')
         return res_molecules

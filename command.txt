@@ -1,2 +1,4 @@
 zsh generate_data.sh 'data/getter_smiles_KP_V1' 'BIMODAL' 'fixed' 14 74 1
+zsh generate_smile.sh 'BIMODAL_fixed_KP_V1_512' 'cross' 100
+
 
