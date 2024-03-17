@@ -1,7 +1,10 @@
 #!/bin/bash
 
+#SBATCH -t 96:00:00
+#SBATCH -p hopper
+
 # Adapt according to your installation.
-CONDA_BASE_DIR=~/software/Miniconda3
+CONDA_BASE_DIR=~/software/miniconda3
 
 # Activate the conda environment.
 source "$CONDA_BASE_DIR/etc/profile.d/conda.sh"
