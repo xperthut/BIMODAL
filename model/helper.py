@@ -61,13 +61,20 @@ def check_valid(mol):
     # Empty SMILE not accepted
     if mol == '':
         return False
+    
+    try:
+        mol = Chem.MolFromSmiles(mol, sanitize=True)
+    except:
+        return False
+
+    return True if isinstance(mol, Chem.rdchem.Mol) else False
 
     # Check valid with RDKit
     # MolFromSmiles returns None if molecule not valid
-    mol = Chem.MolFromSmiles(mol, sanitize=True)
+    '''mol = Chem.MolFromSmiles(mol, sanitize=True)
     if mol is None:
         return False
-    return True
+    return True'''
 
 
 def remove_token(mol, t='G'):
