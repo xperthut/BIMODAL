@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH -t 96:00:00
+#SBATCH -t 24:00:00
 #SBATCH -p hopper
 
 # Adapt according to your installation.
