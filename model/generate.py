@@ -44,10 +44,12 @@ if __name__=="__main__":
 
         for f in [f for f in fl if "molecules_fold_" in f]:
             new_mol = [x[0] for x in pd.read_csv(os.path.join(respath, f), header=None).values.tolist()]
-            print(new_mol)
+            #print(new_mol)
             for x in new_mol:
                 gen_fl.add(x)
                 
+    print()
+    print("Generated molecutes are:")
     print(gen_fl)
 
     
