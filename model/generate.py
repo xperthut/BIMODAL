@@ -33,7 +33,7 @@ if __name__=="__main__":
     elif run_type == "cross":
         model.cross_validation()
         
-    s = Sampler(model_name)
+    s = Sampler(model_name, fold=range(1,11), epoch=range(10))
     s.sample(N=N)
         
     respath = os.path.join('evaluation', model_name, 'molecules')
