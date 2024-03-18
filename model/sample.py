@@ -95,6 +95,7 @@ class Sampler():
                     stor_dir + '/' + self._experiment_name + '/models/model_fold_' + str(f) + '_epochs_' + str(e))
 
                 new_molecules = []
+                turn = 0
                 while len(new_molecules) < N:
                     new_mol = self._encoder.decode(self._model.sample(self._starting_token, T))
 
@@ -115,24 +116,30 @@ class Sampler():
 
                     # If all conditions checked, add new molecule
                     new_molecules.append(new_mol)
+                    
+                    turn+=1
+                    
+                    if turn > 1e7:
+                        break
+                
+                if len(new_molecules)>0:
+                    # Prepare name for file
+                    name = 'molecules_fold_' + str(f) + '_epochs_' + str(e) + '_T_' + str(T) + '_N_' + str(N) + '.csv'
+                    if unique:
+                        name = 'unique_' + name
+                    if valid:
+                        name = 'valid_' + name
+                    if novel:
+                        name = 'novel_' + name
 
-                # Prepare name for file
-                name = 'molecules_fold_' + str(f) + '_epochs_' + str(e) + '_T_' + str(T) + '_N_' + str(N) + '.csv'
-                if unique:
-                    name = 'unique_' + name
-                if valid:
-                    name = 'valid_' + name
-                if novel:
-                    name = 'novel_' + name
+                    # Store final molecules
+                    if write_csv:
+                        if not os.path.exists(stor_dir + '/' + self._experiment_name + '/molecules/'):
+                            os.makedirs(stor_dir + '/' + self._experiment_name + '/molecules/')
+                        mol = np.array(new_molecules).reshape(-1)
+                        pd.DataFrame(mol).to_csv(stor_dir + '/' + self._experiment_name + '/molecules/' + name, header=None, index=False)
 
-                # Store final molecules
-                if write_csv:
-                    if not os.path.exists(stor_dir + '/' + self._experiment_name + '/molecules/'):
-                        os.makedirs(stor_dir + '/' + self._experiment_name + '/molecules/')
-                    mol = np.array(new_molecules).reshape(-1)
-                    pd.DataFrame(mol).to_csv(stor_dir + '/' + self._experiment_name + '/molecules/' + name, header=None, index=False)
-        
-                res_molecules.append(new_molecules)
+                    res_molecules.append(new_molecules)
         
         print('Sampling: done')
         return res_molecules
