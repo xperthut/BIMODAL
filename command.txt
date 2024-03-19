@@ -4,5 +4,5 @@ zsh generate_data.sh 'data/getter_smiles_KP_V2' 'BIMODAL' 'random' 14 74 10
 zsh generate_smile.sh 'BIMODAL_fixed_KP_V1_512' 'cross' 100
 
 sbatch generate_smile.slum 'BIMODAL_fixed_KP_V1_512' 'cross' 500
-sbatch generate_smile.slum 'BIMODAL_fixed_KP_V1_512' 'cross' 500
+sbatch generate_smile.slum 'BIMODAL_random_KP_V2_512_aug_10' 'cross' 100
 
