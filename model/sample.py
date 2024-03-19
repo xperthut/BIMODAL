@@ -101,7 +101,12 @@ class Sampler():
 
                     # Remove remains from generation
                     new_mol = clean_molecule(new_mol[0], self._model_type)
-
+                    
+                    # Check if getter
+                    if getter:
+                        if "#" not in new_mol:
+                            continue
+                            
                     # If not valid, get new molecule
                     if valid and not check_valid(new_mol):
                         continue
@@ -114,12 +119,6 @@ class Sampler():
                     if novel and (new_mol in self._data):
                         continue
                         
-                    # Check if getter
-                    if getter:
-                        print(f"New SMILE: {new_mol}")
-                        if "#" not in new_mol:
-                            continue
-
                     # If all conditions checked, add new molecule
                     new_molecules.append(new_mol)
                     
