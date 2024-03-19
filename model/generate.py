@@ -34,7 +34,7 @@ if __name__=="__main__":
         model.cross_validation()
         
     s = Sampler(model_name)
-    s.sample(N=N, fold=range(1,11))
+    s.sample(N=N, fold=range(1,11), getter=True)
         
     respath = os.path.join('evaluation', model_name, 'molecules')
     gen_fl = set()
