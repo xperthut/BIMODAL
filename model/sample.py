@@ -72,7 +72,7 @@ class Sampler():
         for i, mol_dat in enumerate(self._data):
             self._data[i] = clean_molecule(mol_dat, self._model_type)
 
-    def sample(self, N=100, stor_dir='evaluation', T=0.7, fold=[1], epoch=[9], valid=True, novel=True, unique=True, write_csv=True):
+    def sample(self, N=100, stor_dir='evaluation', T=0.7, fold=[1], epoch=[9], valid=True, novel=True, unique=True, write_csv=True, getter=False, maxIter=1e7):
 
         '''Sample from a model where the number of novel valid unique molecules is fixed
         :param stor_dir:    directory where the generated SMILES are saved
@@ -113,13 +113,19 @@ class Sampler():
                     # If not novel, get molecule
                     if novel and (new_mol in self._data):
                         continue
+                        
+                    # Check if getter
+                    if getter:
+                        print(f"New SMILE: {new_mol}")
+                        if "#" not in new_mol:
+                            continue
 
                     # If all conditions checked, add new molecule
                     new_molecules.append(new_mol)
                     
                     turn+=1
                     
-                    if turn > 1e7:
+                    if turn > maxIter:
                         break
                 
                 if len(new_molecules)>0:
