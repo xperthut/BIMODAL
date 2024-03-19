@@ -119,6 +119,8 @@ class Sampler():
                     if novel and (new_mol in self._data):
                         continue
                         
+                    print(f"PASSED: {new_mol}")
+                    
                     # If all conditions checked, add new molecule
                     new_molecules.append(new_mol)
                     
